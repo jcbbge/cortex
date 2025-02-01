@@ -1,0 +1,44 @@
+FROM timescale/timescaledb:latest-pg15
+
+# Install build dependencies
+RUN apk add --no-cache \
+    git \
+    build-base \
+    postgresql15-dev \
+    clang15 \
+    llvm15 \
+    make
+
+# Install pgvector (specific version for stability)
+RUN git clone --branch v0.7.0 https://github.com/pgvector/pgvector.git \
+    && cd pgvector \
+    && make clean \
+    && make \
+    && make install \
+    && cd .. \
+    && rm -rf pgvector
+
+# Create initialization script
+RUN echo '#!/bin/sh\n\
+set -e\n\
+\n\
+psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-EOSQL\n\
+    CREATE EXTENSION IF NOT EXISTS timescaledb;\n\
+    CREATE EXTENSION IF NOT EXISTS vector;\n\
+\n\
+    ALTER SYSTEM SET maintenance_work_mem = '"'"'1GB'"'"';\n\
+    ALTER SYSTEM SET max_parallel_workers_per_gather = '"'"'4'"'"';\n\
+    ALTER SYSTEM SET max_parallel_maintenance_workers = '"'"'4'"'"';\n\
+EOSQL\n' > /docker-entrypoint-initdb.d/10-init-extensions.sh \
+    && chmod +x /docker-entrypoint-initdb.d/10-init-extensions.sh
+
+# Set PostgreSQL configuration
+RUN echo "shared_buffers = '1GB'\n\
+work_mem = '32MB'\n\
+maintenance_work_mem = '1GB'\n\
+effective_cache_size = '3GB'\n\
+pgvector.hnsw_ef_search = 100\n\
+pgvector.hnsw_m = 16\n\
+max_parallel_workers_per_gather = 4\n\
+max_parallel_maintenance_workers = 4\n\
+max_parallel_workers = 8" >> /usr/local/share/postgresql/postgresql.conf.sample

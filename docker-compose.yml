@@ -1,0 +1,21 @@
+services:
+  cortexai-db:
+    image: pgvector/pgvector:pg15
+    environment:
+      POSTGRES_USER: cortexai
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-cortexai}
+      POSTGRES_DB: cortexai
+    ports:
+      - "5433:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cortexai -d cortexai"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    shm_size: '1gb'
+
+volumes:
+  pg_data:
+    driver: local
