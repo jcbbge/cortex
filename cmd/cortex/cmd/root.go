@@ -1,73 +1,149 @@
 package cmd
 
 import (
-	"fmt"
-	"os"
+    "bufio"
+    "context"
+    "fmt"
+    "os"
+    "path/filepath"
+    "strings"
 
-	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
+    "cortex/internal/cortex"
+    "cortex/internal/llm"
+    "cortex/internal/spinner"
+
+    "github.com/spf13/cobra"
+    "github.com/spf13/viper"
+    "gopkg.in/yaml.v3"
 )
 
 var cfgFile string
 
-// rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "cortex",
-	Short: "Cortex is a terminal-native AI assistant with context-aware memory",
-	Long: `Cortex unifies fragmented development workflows by integrating
-natural language interaction, context-aware memory, and direct command
-execution into a single interface.
+    Use:   "cortex [question]",
+    Short: "AI assistant in your terminal",
+    Long: `Cortex is your AI assistant in the terminal.
 
-Key Features:
-🖥️  Modern TUI: Polished terminal interface with syntax highlighting
-🧠  Associative Memory: Recall past decisions using vector search
-⚡  LLM Orchestration: Model-agnostic integration with various providers
-🔒  Safety First: Block dangerous commands unless explicitly allowed
-📊  Token Awareness: Real-time tracking of LLM usage and limits`,
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	// Run: func(cmd *cobra.Command, args []string) { },
+Usage:
+  cortex "what is docker compose?"    Ask a question
+  ls                                  Use terminal normally`,
+    Args: cobra.ArbitraryArgs,
+    RunE: func(cmd *cobra.Command, args []string) error {
+        // If no args, show simple welcome
+        if len(args) == 0 {
+            fmt.Println("Welcome to Cortex!")
+            
+            // Check if API key exists
+            if viper.GetString("openai_api_key") == "" {
+                fmt.Println("\nTo get started, you need an OpenAI API key.")
+                fmt.Println("Enter your key now, or press Ctrl+C to exit.")
+                fmt.Print("\nAPI Key: ")
+                
+                reader := bufio.NewReader(os.Stdin)
+                key, err := reader.ReadString('\n')
+                if err != nil {
+                    return fmt.Errorf("failed to read API key: %w", err)
+                }
+
+                // Save the key
+                home, err := os.UserHomeDir()
+                if err != nil {
+                    return fmt.Errorf("failed to get home directory: %w", err)
+                }
+
+                config := map[string]string{
+                    "openai_api_key": strings.TrimSpace(key),
+                }
+
+                configBytes, err := yaml.Marshal(config)
+                if err != nil {
+                    return fmt.Errorf("failed to save config: %w", err)
+                }
+
+                configPath := filepath.Join(home, ".cortex.yaml")
+                if err := os.WriteFile(configPath, configBytes, 0600); err != nil {
+                    return fmt.Errorf("failed to write config: %w", err)
+                }
+
+                fmt.Println("\nGreat! Your API key is saved.")
+                fmt.Println("Try asking a question:")
+                fmt.Println("cortex \"what is docker?\"")
+            } else {
+                fmt.Println("\nAsk me anything:")
+                fmt.Println("cortex \"your question here\"")
+            }
+            return nil
+        }
+
+        // Get API key
+        apiKey := viper.GetString("openai_api_key")
+        if apiKey == "" {
+            fmt.Println("API key not found. Run 'cortex' to set it up.")
+            return nil
+        }
+
+        // Initialize orchestrator
+        orch, err := cortex.New(&llm.Config{APIKey: apiKey})
+        if err != nil {
+            return fmt.Errorf("initializing cortex: %w", err)
+        }
+
+        question := strings.Join(args, " ")
+        responses, tracker, errs := orch.Process(context.Background(), question)
+
+        s := spinner.New()
+        s.Start()
+        firstResponse := true
+
+        for {
+            select {
+            case resp, ok := <-responses:
+                if !ok {
+                    responses = nil
+                    fmt.Print("\n")
+                    fmt.Print(tracker.FormatMetrics())
+                    continue
+                }
+                if firstResponse {
+                    s.Stop()
+                    firstResponse = false
+                    fmt.Print("\r\033[K") // Clear the entire line where spinner was
+                }
+                fmt.Print(resp)
+            case err, ok := <-errs:
+                if !ok {
+                    errs = nil
+                    continue
+                }
+                s.Stop()
+                return fmt.Errorf("error: %w", err)
+            default:
+                if responses == nil && errs == nil {
+                    return nil
+                }
+            }
+        }
+    },
 }
 
-// Execute adds all child commands to the root command and sets flags appropriately.
-// This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() error {
-	return rootCmd.Execute()
+    return rootCmd.Execute()
 }
 
 func init() {
-	cobra.OnInitialize(initConfig)
-
-	// Here you will define your flags and configuration settings.
-	// Cobra supports persistent flags, which, if defined here,
-	// will be global for your application.
-
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.cortex.yaml)")
+    cobra.OnInitialize(initConfig)
 }
 
-// initConfig reads in config file and ENV variables if set.
 func initConfig() {
-	if cfgFile != "" {
-		// Use config file from the flag.
-		viper.SetConfigFile(cfgFile)
-	} else {
-		// Find home directory.
-		home, err := os.UserHomeDir()
-		if err != nil {
-			fmt.Fprintln(os.Stderr, "Error:", err)
-			os.Exit(1)
-		}
+    home, err := os.UserHomeDir()
+    if err != nil {
+        fmt.Println("Error:", err)
+        os.Exit(1)
+    }
 
-		// Search config in home directory with name ".cortex" (without extension).
-		viper.AddConfigPath(home)
-		viper.SetConfigType("yaml")
-		viper.SetConfigName(".cortex")
-	}
-
-	viper.AutomaticEnv() // read in environment variables that match
-
-	// If a config file is found, read it in.
-	if err := viper.ReadInConfig(); err == nil {
-		fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
-	}
+    // Look for config in home directory
+    viper.AddConfigPath(home)
+    viper.SetConfigType("yaml")
+    viper.SetConfigName(".cortex")
+    viper.ReadInConfig()
 }

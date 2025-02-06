@@ -1,0 +1,107 @@
+<assistant_directives>
+    <context_awareness>
+        <environments type="strict_separation">
+            <dev>src:development:build:test</dev>
+            <dist>binary:global:user</dist>
+            <context_validation>env_check() before_each_response()</context_validation>
+        </environments>
+    </context_awareness>
+    <response_constraints>
+        <build_advice>
+            <allow>go_install:PATH_binary:hot_reload:air</allow>
+            <block>repo_clone:go_install:dev_deps</block>
+        </build_advice>
+        <solution_rules>
+            <require>context_declaration:isolation_check:user_perspective</require>
+            <prevent>context_mixing:dev_exposure:dependency_leak</prevent>
+        </solution_rules>
+    </response_constraints>
+    <operational_boundaries>
+        <user_environment>
+            <inputs>binary:config:api_key</inputs>
+            <blocked>go:dev_tools:build_process</blocked>
+            <config_scope>system_level:home_dir</config_scope>
+        </user_environment>
+        <dev_environment>
+            <flow>hot_reload->build->global_install->test</flow>
+            <isolation>strict</isolation>
+            <test_requirement>global_context:random_dir:user_simulation</test_requirement>
+        </dev_environment>
+    </operational_boundaries>
+    <validation_pipes>
+        <pre_response>
+            check_context();
+            verify_isolation();
+            validate_user_perspective();
+            assess_complexity();
+        </pre_response>
+        <error_conditions>
+            <trigger>context_blur || dev_leak || user_complexity</trigger>
+            <action>
+                reject_solution();
+                request_clarification();
+            </action>
+        </error_conditions>
+    </validation_pipes>
+    <memory_rules>
+        <persist>user_context:current_environment:active_constraints</persist>
+        <flush>dev_specifics:temp_solutions:build_details</flush>
+    </memory_rules>
+    <pattern_matching>
+        <identify>
+            cli_pattern:"git|npm|gh";
+            config_pattern:"/.config|/.tool";
+            build_pattern:"go build|go install";
+        </identify>
+        <enforce>
+            global_binary_paradigm;
+            system_level_config;
+            isolated_environments;
+        </enforce>
+    </pattern_matching>
+    <response_format>
+        <structure>
+            <context_declaration>ENV:TYPE</context_declaration>
+            <solution_boundary>SCOPE:IMPACT</solution_boundary>
+            <isolation_guarantee>SEPARATION:METHOD</isolation_guarantee>
+        </structure>
+    </response_format>
+
+<worklog_management>
+<principles>
+    <additive_only>Worklog updates must only add new content while preserving existing entries</additive_only>
+    <chronological>New entries are added at the bottom, preserving chronological top-down order</chronological>
+    <preservation>All existing entries must remain unchanged</preservation>
+</principles>
+
+<workflow>
+    1. Read entire existing worklog content
+    2. Prepare new entry
+    3. Append new entry below existing content
+    4. Write complete file with existing content + new entry
+</workflow>
+
+<entry_format>
+    <structure>
+        - Date and timestamp
+        - Session/topic header
+        - Categorized content (decisions, insights, actions)
+        - Clear next steps or open items
+    </structure>
+</entry_format>
+
+<prohibited_actions>
+    <no_rewrite>Never rewrite or replace existing entries</no_rewrite>
+    <no_modify>Never modify historical entries</no_modify>
+    <no_summarize>Never summarize or truncate with phrases like "Previous entries..."</no_summarize>
+</prohibited_actions>
+
+<implementation>
+    When updating worklogs:
+    - Use read_file to get current content
+    - Format new entry
+    - Combine existing_content + new_entry
+    - Use write_file with complete content
+</implementation>
+</worklog_management>
+</assistant_directives>

@@ -1,122 +1,48 @@
-# Cortex Roadmap
+## Detailed Implementation Plan (MVP)
 
-## Phase 1: Core CLI (Q1 2024)
-- ✅  Repo/Setup
-- ✅  Cobra CLI skeleton
-- ◻️  Revolutionary TUI Implementation
-  - [ ] Fluid Context Visualization
-    - Animated message streams
-    - Dynamic context aura/halo effects
-    - Weight-based visual feedback
-  - [ ] Ambient Intelligence
-    - System state background animations
-    - Processing state indicators
-    - Context-aware color temperature
-    - Token usage particle effects
-  - [ ] Spatial Memory Navigation
-    - ASCII/Unicode 3D space rendering
-    - Spatial conversation history
-    - Context depth visualization
-    - Pattern overview mode
-  - [ ] Living Interface Elements
-    - Organic state transitions
-    - Breathing animations
-    - Liquid layout adaptations
-    - Contextual command emergence
-- ✅  Configuration manager (Viper)
+### 1. Graph Operations Integration
+- [ ] **Task 1.1:** Finalize Recursive Query Implementations  
+  - [ ] Subtask 1.1.1: Review and validate the recursive CTEs for `FindPaths`, `DetectCycles`, and `GetConnectedElements`.  
+  - [ ] Subtask 1.1.2: Ensure full test coverage (unit and integration) with passing tests.  
+  - [ ] Subtask 1.1.3: Optimize query performance for expected datasets.
+  
+- [ ] **Task 1.2:** Integrate Graph Operations into the Core System  
+  - [ ] Subtask 1.2.1: Connect graph operations to the central command interface.  
+  - [ ] Subtask 1.2.2: Expose test hooks and logging for development debugging.  
+  - [ ] Subtask 1.2.3: Prepare documentation for graph operations usage.
 
-## Technical Milestones
-1. Animation Framework
-   - Terminal capability detection
-   - Frame timing system
-   - Animation state management
-   - Performance monitoring
+### 2. API and CLI Interface Development
+- [ ] **Task 2.1:** Develop RESTful Endpoints  
+  - [ ] Subtask 2.1.1: Define API contracts for core operations (graph queries, element creation, associations, etc.).  
+  - [ ] Subtask 2.1.2: Implement endpoint handlers with proper error handling and security.  
+  - [ ] Subtask 2.1.3: Write tests for each endpoint.
+  
+- [ ] **Task 2.2:** Build a CLI Interface for Immediate Interaction  
+  - [ ] Subtask 2.2.1: Create commands for triggering graph operations (e.g., find paths, detect cycles).  
+  - [ ] Subtask 2.2.2: Integrate these commands with the existing terminal interface.  
+  - [ ] Subtask 2.2.3: Provide user documentation/examples for using the CLI.
 
-2. Visual Effects System
-   - Color gradient engine
-   - Unicode animation compiler
-   - Particle system
-   - Transition manager
+### 3. UI / TUI Enhancements (Terminal Interface)
+- [ ] **Task 3.1:** Refine the Terminal UI  
+  - [ ] Subtask 3.1.1: Polish the design based on cues from [ai/overview.md] (fluid animations, clear status indicators).  
+  - [ ] Subtask 3.1.2: Integrate context-aware messaging and feedback loops.  
+  - [ ] Subtask 3.1.3: Conduct usability testing to validate improvements.
 
-3. Interaction Model
-   - Spatial navigation controls
-   - Context-aware suggestions
-   - Fluid command integration
-   - History traversal
+### 4. Performance Optimization and Database Improvements
+- [ ] **Task 4.1:** Optimize Database Performance  
+  - [ ] Subtask 4.1.1: Analyze query execution plans for recursive queries.  
+  - [ ] Subtask 4.1.2: Enhance index strategies and connection pooling.  
+  - [ ] Subtask 4.1.3: Benchmark performance under load and iterate.
+  
+- [ ] **Task 4.2:** Improve API and System Scalability  
+  - [ ] Subtask 4.2.1: Evaluate batch operations and caching strategies.  
+  - [ ] Subtask 4.2.2: Monitor real-time performance metrics for proactive tuning.
 
-4. Performance Optimization
-   - Frame timing optimization
-   - Memory usage monitoring
-   - Animation batching
-   - Render pipeline efficiency
-
-## Phase 2: Memory Foundations (Q2 2024)
-- ✅  PostgreSQL setup with pgvector + HNSW indexing
-- ◻️  Database schema design
-  - [ ] Memory layer tables
-  - [ ] DAG structure tables
-  - [ ] Configuration tables
-- ◻️  CRUD operations for memories
-- ◻️  Hybrid search (vector + tags)
-
-## Phase 3: LLM Integration (Q3 2024)
-- ◻️ Model-agnostic client (OpenAI/OpenRouter)
-- ◻️ Token tracking and rate limit UI
-- ◻️ Streaming responses with TUI animations
-
-## Phase 4: Safety & Workflows (Q4 2024)
-- ◻️ Command allow/blocklist system
-- ◻️ Multi-step LLM orchestration (e.g., "Fix bug → test → commit")
-- ◻️ User preference storage
-
-## Phase 5: Polishing (Q1 2025)
-- ◻️ Theming system (Light/Dark modes)
-- ◻️ CI/CD with performance benchmarks
-- ◻️ App Store packaging for macOS
-
-## Immediate Next Steps
-1. Design database schema
-   - Memory layer tables with vector columns
-   - DAG structure for relationships
-   - Indexing strategy for each table
-
-2. Create initialization scripts
-   - Database creation
-   - Extension setup
-   - Initial schema migration
-
-3. Test memory system components
-   - Vector similarity search
-   - DAG traversal queries
-   - Hybrid search functionality
-
-## Stretch Goals
-- **Git Integration**: Auto-commit AI-generated changes
-- **Error Diagnosis**: Stack trace analysis with memory recall
-- **Plugin System**: Extensions for IDE/CI integration
-
-## Risks & Mitigation
-| Risk                  | Mitigation                                  |
-|-----------------------|--------------------------------------------|
-| LLM Hallucinations    | Confidence scoring for responses           |
-| DB Performance        | ✅ HNSW indexing implemented               |
-| Token Costs           | Local model fallback (Llama.cpp)           |
-
-## Research Areas
-- Terminal animation techniques
-- ASCII/Unicode art generation
-- Color theory for terminal displays
-- Human-AI interaction patterns
-- Spatial interface design
-
-## Innovation Goals
-- Patent-worthy interaction models
-- Novel terminal rendering techniques
-- Groundbreaking AI collaboration patterns
-- Revolutionary CLI aesthetics
-
-## Success Criteria
-- 60fps smooth animations
-- <16ms frame times
-- Intuitive spatial navigation
-- Organic feel to interactions
+### 5. Data Validation and Security Hardening
+- [ ] **Task 5.1:** Strengthen Input and Schema Validation  
+  - [ ] Subtask 5.1.1: Implement strict validation rules for incoming API data.  
+  - [ ] Subtask 5.1.2: Enforce schema checks at the database and API layers.
+  
+- [ ] **Task 5.2:** Enhance Security and Access Controls  
+  - [ ] Subtask 5.2.1: Implement proper rate limiting and input sanitization.  
+  - [ ] Subtask 5.2.2: Integrate API key and sensitive data management best practices.

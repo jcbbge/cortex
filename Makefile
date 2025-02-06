@@ -14,13 +14,12 @@ BINARY_UNIX=$(BINARY_NAME)_unix
 BUILD_DIR=./bin
 CMD_DIR=./cmd/cortex
 
-.PHONY: all build clean test coverage deps lint run dev install-tools
+.PHONY: all build clean test coverage deps lint run dev install-tools install
 
-all: test build
+install:
+	go install ./cmd/cortex
 
-$(BUILD_DIR):
-	mkdir -p $(BUILD_DIR)
-
+# Rest of the Makefile remains unchanged...
 build: $(BUILD_DIR)
 	CGO_ENABLED=1 $(GOBUILD) -o $(BUILD_DIR)/$(BINARY_NAME) -v $(CMD_DIR)
 
@@ -35,10 +34,6 @@ clean:
 	$(GOCLEAN)
 	rm -rf $(BUILD_DIR)
 
-run:
-	$(GOBUILD) -o $(BUILD_DIR)/$(BINARY_NAME) -v $(CMD_DIR)
-	./$(BUILD_DIR)/$(BINARY_NAME)
-
 deps:
 	$(GOMOD) download
 	$(GOMOD) verify
@@ -46,16 +41,13 @@ deps:
 lint:
 	golangci-lint run
 
-# Development with hot reload
 dev:
 	CGO_ENABLED=1 air -c $(PWD)/.air.toml
 
-# Install development tools
 install-tools:
 	go install github.com/air-verse/air@latest
 	go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 
-# Cross compilation
 build-linux:
 	CGO_ENABLED=1 GOOS=linux GOARCH=amd64 $(GOBUILD) -o $(BUILD_DIR)/$(BINARY_UNIX) -v $(CMD_DIR)
 
