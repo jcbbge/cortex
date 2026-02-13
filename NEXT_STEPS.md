@@ -1,125 +1,96 @@
 # Next Steps
 
-**Updated:** 2026-02-12
+**Updated:** 2026-02-12 19:30
 **Branch:** main
-**Context:** Initial Cortex setup after meta-analysis of session-mining/ending-session
+**Status:** Session complete - moving to roux
 
 ---
 
 ## Current State
 
-Cortex initialized as proper playground for agent orchestration research.
-
 **Completed:**
-- Created repository structure
-- Moved session mining meta-analysis to `research/001_*`
-- Identified core problem: skills are documentation, need execution primitives
-- Recognized "hidden architecture" trying to emerge
+- ✓ Audited 46 skills → reduced to 27 (19 deprecated)
+- ✓ Identified promotions (5 skills → hooks/rules)
+- ✓ Identified merges (5 pairs to consolidate)
+- ✓ Updated session-mining to evaluate full mechanism taxonomy
+- ✓ Created cortex as experimental playground
 
-**Key Finding:** 46 skills exist, only 2-4 used. Skills can't chain, pass state, or auto-trigger. They're suggestions, not enforcement.
+**Key Finding:**
+- User already has classification framework in roux/FRAMEWORK.md
+- (Dimension, Scope, Agency) triple is the routing system
+- Skills were bloated catch-all, now cleaned up
+
+**Remaining Skills: 27**
+- 9 domain knowledge (keep)
+- 5 need promotion (to hooks/rules)
+- 5 pairs need merging
+- Rest are workflows/utilities
 
 ---
 
-## Next Steps
+## Next Session: Work in roux
 
-### 1. Spawn "Agent Composition Primitives" Exploration
+**Primary Goal:** Apply roux/FRAMEWORK.md to organize agent tooling
 
-**New session with context:**
+### 1. Move Cortex Work into Roux
+- cortex = playground/filtration
+- roux = production system
+- cortex findings feed into roux
 
-```
-Read /Users/jcbbge/cortex/research/001_session_mining_meta_analysis.md
+### 2. Implement Promotions
+From `cortex/migrations/PROMOTION_PLAN.md`:
+- timestamp-protocol → CLAUDE.md rule
+- fresh-eyes-review → PostToolUse hook
+- refactoring-framework → PreToolUse hook
+- ending-session → Stop hook
+- starting-session → Init hook
 
-Context: Meta-analysis revealed:
-- Skills are documentation, not enforcement (wrong abstraction)
-- Missing primitives: state passing, auto-chaining, execution model
-- 46 skills but only 2-4 used (attention bankruptcy)
-- Hidden architecture trying to emerge (skills want to compose)
+### 3. Consolidate Merges
+- Merge skill pairs identified in audit
+- Reduce overlap and redundancy
 
-Task: Design agent composition primitives
-
-Goals:
-1. State passing protocol (skills → input/output)
-2. Auto-chaining via conditions (workflows)
-3. Execution model (not just markdown)
-4. Migration strategy (46 skills → proper mechanisms)
-
-Questions to answer:
-- What's the execution model for composable agents?
-- How does state pass between skill invocations?
-- Can we "de-skillify" by promoting to hooks/rules?
-- What's the spec for "executable skills"?
-- How to migrate incrementally (no big rewrite)?
-
-Output:
-- Prototype: executable skill spec (in specs/)
-- Design: state passing protocol
-- Strategy: de-skillification migration plan
-- Examples: 3-5 conversions (skill → hook/rule/workflow)
-
-Constraints:
-- Must work with OpenCode/Claude architecture
-- Incremental adoption (backwards compatible)
-- Reduce cognitive load (simplify, don't add)
-```
-
-### 2. De-skillification Audit (After Composition Design)
-
-Run on `/Users/jcbbge/Documents/metaprompts/_skills/`:
-- Evaluate all 46 skills against AGENT_UPGRADE_ANALYSIS_CHECKLIST.md
-- Identify: which should be hooks? rules? tools? workflows?
-- Prioritize: most impactful conversions first
-- Document in `migrations/audit_results.md`
-
-### 3. Implement Session-Mining v2 + Ending-Session v5
-
-Apply findings from meta-analysis:
-- session-mining: Add full taxonomy evaluation (8 mechanism types)
-- ending-session: Add auto-mining trigger logic
-- Test integrated workflow
+### 4. Apply Roux Framework
+Use (Dimension, Scope, Agency) triple to classify:
+- What remaining tools are misrouted?
+- What should be in different scopes?
+- What's missing from the system?
 
 ---
 
 ## Context
 
 ### Key Files
-
-- `research/001_session_mining_meta_analysis.md` - Full findings from meta-analysis
-- `/Users/jcbbge/Documents/metaprompts/AGENT_UPGRADE_ANALYSIS_CHECKLIST.md` - 8 mechanism taxonomy
-- `/Users/jcbbge/Documents/metaprompts/_skills/session-mining/SKILL.md` - Current (incomplete)
-- `/Users/jcbbge/Documents/metaprompts/_skills/ending-session/SKILL.md` - Current (isolated)
+- `cortex/migrations/skill_audit_2026-02-12.md` - Full audit results
+- `cortex/migrations/PROMOTION_PLAN.md` - Promotion roadmap
+- `cortex/research/001_session_mining_meta_analysis.md` - Original analysis
+- `roux/FRAMEWORK.md` - Classification system (Dimension, Scope, Agency)
 
 ### Decisions Made
-
-- **Cortex is the playground** for agent orchestration R&D
-- **Skills are wrong abstraction** - promote to hooks/rules where possible
-- **State passing is critical** - can't compose without it
-- **Incremental migration** - no big rewrite, adapt existing
-
-### Key Insights
-
-1. **Skills = documentation pretending to be enforcement**
-2. **12.5% taxonomy coverage** in session-mining (only synthesizes skills)
-3. **Hidden architecture emerging** - execution model trying to form
-4. **46 skills is attention bankruptcy** - need stronger mechanisms
-5. **Dogfooding the analysis** - using broken tools to design fixed tools
+- Cortex = experimental playground (test ideas, filtration)
+- Roux = production system (apply framework, organize properly)
+- Skills reduced from 46 → 27 (63% → 41% reduction with keeps)
+- Future work happens in roux, not cortex
 
 ---
 
 ## Blockers/Questions
 
-**None.** Path is clear:
-
-1. Design composition primitives (new session)
-2. Audit existing skills (migration plan)
-3. Implement upgrades (v2/v5)
-4. Test integrated workflow
+None. Path is clear:
+1. Work in roux
+2. Apply existing framework
+3. Promote skills to stronger mechanisms
+4. Consolidate redundancy
 
 ---
 
-## Meta-Note
+## User State
 
-This is the handoff from "meta-analysis session" to "composition primitives exploration."
+**Overwhelmed.** Multiple parallel threads, reinventing wheels, unsustainable.
 
-**We're practicing what we're designing:** using session-mining + ending-session to create artifacts that spawn the next session.
+**Need:** Convergence. Organization. System that handles incoming firehose.
 
-The tools examining themselves. 🔄
+**Solution:** Stop creating new frameworks. Use roux/FRAMEWORK.md (already built). Execute promotions. Consolidate.
+
+---
+
+**Next session starts in roux. Cortex work feeds into it.**
