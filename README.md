@@ -1,65 +1,41 @@
-# Cortex
+# cortex
 
-**Meta-cognitive architecture for AI-assisted development.**
+Personal workspace for agent orchestration experiments.
 
-## Vision
+## What This Is
 
-Agent orchestration isn't about skills—it's about **execution primitives** that compose reliably.
+Playground for exploring how AI agents compose, chain, and pass state.
 
-This project explores:
-- **State passing** between agent invocations
-- **Automatic chaining** via hooks and workflows
-- **De-skillification**: promoting patterns from documentation to enforcement
-- **Execution models** for composable agent mechanisms
-- **Meta-cognitive tooling** that improves itself
+Started from meta-analysis of session-mining/ending-session skills. Found some interesting gaps. Storing work here.
 
-## The Problem
+## Current Thread
 
-- 46 skills, only 2-4 used (attention bankruptcy)
-- Skills are "pretty please try this" (suggestions, not enforcement)
-- No state passing (agents can't compose)
-- No auto-chaining (manual orchestration)
-- Wrong abstraction (skills should be hooks/rules/tools)
+Working on: agent composition primitives
 
-## The Insight
+Questions:
+- How should skills chain reliably?
+- What's missing for state passing?
+- Why do I have 46 skills but only use 2-4?
+- Are skills even the right abstraction?
 
-**Skills are documentation pretending to be enforcement.**
-
-What we actually need:
-- **Rules** → constraints (MUST)
-- **Hooks** → automation (WHEN X, DO Y)
-- **Tools** → capabilities (CAN)
-- **Workflows** → composition (THEN)
-- **State** → context preservation (PASS)
-
-Skills should be the exception, not the default.
-
-## Project Structure
+## Structure
 
 ```
 cortex/
-├── research/           # Session analyses, findings
-├── specs/              # Execution model designs
-├── prototypes/         # Experimental implementations
-├── migrations/         # Skill → mechanism conversions
-└── meta/               # Tools for improving tools
+├── research/      # analyses, findings, notes
+├── specs/         # if we design anything formal
+├── prototypes/    # experiments
+├── migrations/    # if we refactor existing stuff
+└── meta/          # tools for improving tools
 ```
 
-## Current Focus
+## Notes
 
-**Phase 1:** Agent composition primitives
-- Design state passing protocol
-- Prototype executable skill spec
-- Create migration path from current skills
-- Build meta-cognitive feedback loop
-
-## Meta-Observation
-
-This project uses the broken tooling to design the fixed tooling.
-
-**Dogfooding the dogfooding analysis.**
+- Not decided on direction yet
+- Could evolve into something, could stay personal
+- Name might change
+- Focus on the work, not the packaging
 
 ---
 
 *Started: 2026-02-12*
-*Context: Meta-analysis of session-mining revealed systematic gaps*
